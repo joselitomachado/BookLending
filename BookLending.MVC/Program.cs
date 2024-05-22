@@ -1,7 +1,15 @@
+using BookLending.MVC.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<BookLendingDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("BookLendingCs"));
+});
 
 var app = builder.Build();
 
