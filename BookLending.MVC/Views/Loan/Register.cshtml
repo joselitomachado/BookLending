@@ -6,25 +6,25 @@
 
 <div class="container bg-dark p-5 rounded-5">
     <div class="mb-5 text-center">
-        <h1 class="text-light">Cadastro de Empréstimos</h1>
+        <h1 class="text-light">Cadastro de Empréstimo</h1>
     </div>
 
     <form method="post" asp-controller="Loan" asp-action="Register">
         <div class="mb-3">
             <label for="Recipient" class="form-label text-light">Recebedor</label>
-            <input type="text" class="form-control" asp-for="Recipient" id="Recipient" placeholder="Quem está recebendo o livro?">
+            <input type="text" class="form-control text-light" asp-for="Recipient" id="Recipient" placeholder="Quem está recebendo o livro?">
             <span class="text-danger" asp-validation-for="Recipient"></span>
         </div>
 
         <div class="mb-3">
             <label for="Provider" class="form-label text-light">Fornecedor</label>
-            <input type="text" class="form-control" asp-for="Provider" id="Provider" placeholder="Quem está emprestando o livro?">
+            <input type="text" class="form-control text-light" asp-for="Provider" id="Provider" placeholder="Quem está emprestando o livro?">
             <span class="text-danger" asp-validation-for="Provider"></span>
         </div>
 
         <div class="mb-3">
             <label for="Book" class="form-label text-light">Livro</label>
-            <input type="text" class="form-control" asp-for="BorrowedBook" id="Book" placeholder="Qual é o livro que está sendo emprestado?">
+            <input type="text" class="form-control text-light" asp-for="BorrowedBook" id="Book" placeholder="Qual é o livro que está sendo emprestado?">
             <span class="text-danger" asp-validation-for="BorrowedBook"></span>
         </div>
 
