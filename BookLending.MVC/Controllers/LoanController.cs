@@ -71,8 +71,12 @@ public class LoanController : Controller
             _bookLendingDb.Loans.Add(loans);
             _bookLendingDb.SaveChanges();
 
+            TempData["SuccessMessage"] = "Cadastro realizado com sucesso.";
+
             return RedirectToAction("Index");
         }
+
+        TempData["ErrorMessage"] = "Ocorreu um erro ao realizar um cadastro.";
 
         return View();
     }
@@ -85,8 +89,12 @@ public class LoanController : Controller
             _bookLendingDb.Loans.Update(loan);
             _bookLendingDb.SaveChanges();
 
+            TempData["SuccessMessage"] = "Edição realizado com sucesso.";
+
             return RedirectToAction("Index");
         }
+
+        TempData["ErrorMessage"] = "Ocorreu um erro ao realizar uma edição.";
 
         return View(loan);
     }
@@ -96,11 +104,15 @@ public class LoanController : Controller
     {
         if(loan == null)
         {
+            TempData["ErrorMessage"] = "Ocorreu um erro ao realizar uma remoção.";
+
             return NotFound();
         }
 
         _bookLendingDb.Loans.Remove(loan);
         _bookLendingDb.SaveChanges();
+
+        TempData["SuccessMessage"] = "Remoção realizada com sucesso.";
 
         return RedirectToAction("Index");
     }
