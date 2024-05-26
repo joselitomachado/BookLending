@@ -15,8 +15,8 @@
             "search": "Procurar:",
             "zeroRecords": "No matching records found",
             "paginate": {
-                "first": "Primeiro",
-                "last": "Último",
+                "first": "",
+                "last": "",
                 "next": "Próximo",
                 "previous": "Anterior"
             },
