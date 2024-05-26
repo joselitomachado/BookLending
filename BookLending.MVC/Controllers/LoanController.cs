@@ -1,6 +1,8 @@
 ﻿using BookLending.MVC.Data;
 using BookLending.MVC.Models;
+using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace BookLending.MVC.Controllers;
 
@@ -30,14 +32,14 @@ public class LoanController : Controller
     [HttpGet]
     public IActionResult Edit(int? id)
     {
-        if(id == null || id == 0)
+        if (id == null || id == 0)
         {
             return NotFound();
         }
 
-        LoansModel loan = _bookLendingDb.Loans.FirstOrDefault(x => x.Id == id);
+        var loan = _bookLendingDb.Loans.FirstOrDefault(x => x.Id == id);
 
-        if(loan == null)
+        if (loan == null)
         {
             return NotFound();
         }
@@ -53,7 +55,7 @@ public class LoanController : Controller
             return NotFound();
         }
 
-        LoansModel loan = _bookLendingDb.Loans.FirstOrDefault(x => x.Id == id);
+        var loan = _bookLendingDb.Loans.FirstOrDefault(x => x.Id == id);
 
         if (loan == null)
         {
@@ -63,12 +65,53 @@ public class LoanController : Controller
         return View(loan);
     }
 
+    public IActionResult Export()
+    {
+        var dados = GetDados();
+
+        using (XLWorkbook workBook = new())
+        {
+            workBook.AddWorksheet(dados, "Dados Empréstimos");
+
+            using (MemoryStream ms = new())
+            {
+                workBook.SaveAs(ms);
+                return File(ms.ToArray(), "application/vnd.openxmlformats-officedocument.spredsheetml.sheet", "emprestimo.xls");
+            }
+        }
+    }
+
+    private DataTable GetDados()
+    {
+        DataTable dataTable = new();
+
+        dataTable.TableName = "Dados empréstimos";
+        dataTable.Columns.Add("Recebedor", typeof(string));
+        dataTable.Columns.Add("Fornecedor", typeof(string));
+        dataTable.Columns.Add("Livro", typeof(string));
+        dataTable.Columns.Add("Data empréstimo", typeof(DateTime));
+
+        var dados = _bookLendingDb.Loans.ToList();
+
+        if (dados.Count > 0)
+        {
+            dados.ForEach(loan =>
+            {
+                dataTable.Rows.Add(loan.Recipient, loan.Provider, loan.BorrowedBook, loan.LoanDate);
+            });
+        }
+
+        return dataTable;
+    }
+
     [HttpPost]
-    public IActionResult Register(LoansModel loans)
+    public IActionResult Register(LoansModel loan)
     {
         if (ModelState.IsValid)
         {
-            _bookLendingDb.Loans.Add(loans);
+            loan.LoanDate = DateTime.Now;
+
+            _bookLendingDb.Loans.Add(loan);
             _bookLendingDb.SaveChanges();
 
             TempData["SuccessMessage"] = "Cadastro realizado com sucesso.";
@@ -86,7 +129,13 @@ public class LoanController : Controller
     {
         if (ModelState.IsValid)
         {
-            _bookLendingDb.Loans.Update(loan);
+            var loanDb = _bookLendingDb.Loans.Find(loan.Id);
+
+            loanDb.Recipient = loan.Recipient;
+            loanDb.Provider = loan.Provider;
+            loanDb.BorrowedBook = loan.BorrowedBook;
+
+            _bookLendingDb.Loans.Update(loanDb);
             _bookLendingDb.SaveChanges();
 
             TempData["SuccessMessage"] = "Edição realizado com sucesso.";
@@ -102,7 +151,7 @@ public class LoanController : Controller
     [HttpPost]
     public IActionResult Delete(LoansModel loan)
     {
-        if(loan == null)
+        if (loan == null)
         {
             TempData["ErrorMessage"] = "Ocorreu um erro ao realizar uma remoção.";
 
@@ -116,5 +165,4 @@ public class LoanController : Controller
 
         return RedirectToAction("Index");
     }
-
 }
