@@ -34,7 +34,7 @@ namespace BookLending.MVC.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("LastUpdatedDate")
+                    b.Property<DateTime>("LoanDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Provider")

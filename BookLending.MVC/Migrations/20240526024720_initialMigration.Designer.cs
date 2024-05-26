@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookLending.MVC.Migrations
 {
     [DbContext(typeof(BookLendingDbContext))]
-    [Migration("20240526013547_FirstMigration")]
-    partial class FirstMigration
+    [Migration("20240526024720_initialMigration")]
+    partial class initialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,7 +37,7 @@ namespace BookLending.MVC.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("LastUpdatedDate")
+                    b.Property<DateTime>("LoanDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Provider")
