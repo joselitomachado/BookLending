@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookLending.MVC.Migrations
 {
     [DbContext(typeof(BookLendingDbContext))]
-    [Migration("20240522113951_CreateDatabase")]
-    partial class CreateDatabase
+    [Migration("20240526013547_FirstMigration")]
+    partial class FirstMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
