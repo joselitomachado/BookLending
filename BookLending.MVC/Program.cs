@@ -1,4 +1,6 @@
 using BookLending.MVC.Data;
+using BookLending.MVC.Services.LoginService;
+using BookLending.MVC.Services.PasswordService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +12,9 @@ builder.Services.AddDbContext<BookLendingDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("BookLendingCs"));
 });
+
+builder.Services.AddScoped<ILoginInterface, LoginService>();
+builder.Services.AddScoped<IPasswordInterface, PasswordService>();
 
 var app = builder.Build();
 
