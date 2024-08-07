@@ -67,7 +67,7 @@ public class LoanController : Controller
 
     public IActionResult Export()
     {
-        var dados = GetDados();
+        var dados = GetData();
 
         using (XLWorkbook workBook = new())
         {
@@ -81,7 +81,7 @@ public class LoanController : Controller
         }
     }
 
-    private DataTable GetDados()
+    private DataTable GetData()
     {
         DataTable dataTable = new();
 
