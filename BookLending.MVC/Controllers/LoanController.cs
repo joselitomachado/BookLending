@@ -1,5 +1,6 @@
 ﻿using BookLending.MVC.Data;
 using BookLending.MVC.Models;
+using BookLending.MVC.Services.SessionService;
 using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
@@ -9,15 +10,24 @@ namespace BookLending.MVC.Controllers;
 public class LoanController : Controller
 {
     private readonly BookLendingDbContext _bookLendingDb;
+    private readonly ISessionInterface _sessionInterface;
 
-    public LoanController(BookLendingDbContext bookLendingDb)
+    public LoanController(BookLendingDbContext bookLendingDb, ISessionInterface sessionInterface)
     {
         _bookLendingDb = bookLendingDb;
+        _sessionInterface = sessionInterface;
     }
 
     [HttpGet]
     public IActionResult Index()
     {
+        var user = _sessionInterface.GetSession();
+
+        if(user == null)
+        {
+            return RedirectToAction("Login", "Login");
+        }
+
         IEnumerable<LoansModel> loans = _bookLendingDb.Loans;
 
         return View(loans);
@@ -26,12 +36,26 @@ public class LoanController : Controller
     [HttpGet]
     public IActionResult Register()
     {
+        var user = _sessionInterface.GetSession();
+
+        if (user == null)
+        {
+            return RedirectToAction("Login", "Login");
+        }
+
         return View();
     }
 
     [HttpGet]
     public IActionResult Edit(int? id)
     {
+        var user = _sessionInterface.GetSession();
+
+        if (user == null)
+        {
+            return RedirectToAction("Login", "Login");
+        }
+
         if (id == null || id == 0)
         {
             return NotFound();
@@ -50,6 +74,13 @@ public class LoanController : Controller
     [HttpGet]
     public IActionResult Delete(int? id)
     {
+        var user = _sessionInterface.GetSession();
+
+        if (user == null)
+        {
+            return RedirectToAction("Login", "Login");
+        }
+
         if (id == null || id == 0)
         {
             return NotFound();
