@@ -1,6 +1,7 @@
 using BookLending.MVC.Data;
 using BookLending.MVC.Services.LoginService;
 using BookLending.MVC.Services.PasswordService;
+using BookLending.MVC.Services.SessionService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,8 +14,16 @@ builder.Services.AddDbContext<BookLendingDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("BookLendingCs"));
 });
 
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<ILoginInterface, LoginService>();
 builder.Services.AddScoped<IPasswordInterface, PasswordService>();
+builder.Services.AddScoped<ISessionInterface, SessionService>();
+
+builder.Services.AddSession(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
@@ -33,8 +42,10 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+app.UseSession();
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Login}/{action=Login}/{id?}");
 
 app.Run();
