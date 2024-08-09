@@ -6,4 +6,5 @@ namespace BookLending.MVC.Services.LoginService;
 public interface ILoginInterface
 {
     Task<ResponseModel<UserModel>> UserRegister(UserRegisterDto userRegisterDto);
+    Task<ResponseModel<UserModel>> Login(UserLoginDto userLoginDto);
 }
